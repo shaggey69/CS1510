@@ -55,7 +55,7 @@ public:
                              //specification
   const T& top() const throw (Oops);
   
-  bool isEmpty();
+  bool isEmpty() const;
   
   void push(const T& x);
   
@@ -64,7 +64,11 @@ public:
   void clear();
   
   int size() const;
+  
+  const Node<T>* getFirstPtr() const;
 
+
+  
             
 };
 

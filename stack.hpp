@@ -8,6 +8,25 @@ Description: brain lab implement
 using namespace std;
   
 
+  
+  //clear function :)
+template <class T> 
+void LinkedListStack<T>::clear()
+{
+	Node<T>* tmp = m_head;  
+	Node<T>* tmp2;
+  while (tmp != NULL)
+  {
+    tmp2 = tmp -> m_next;  
+    delete tmp;
+    tmp = tmp2;
+  }
+  m_head = NULL;
+  m_back = NULL;
+  m_size = 0;
+  return;
+
+}
 template <class T>
 LinkedListStack<T>::LinkedListStack()
 {
@@ -19,15 +38,14 @@ LinkedListStack<T>::LinkedListStack()
 template <class T>
 const T& LinkedListStack<T>::top() const throw ( Oops )
 {
- 	if (m_head == NULL)
- 		throw (Oops);
- 	return m_head -> m_data;
-  catch (Oops o1)
-  {
-    o1.getMsg();
-  }
+  
+    if (m_head == NULL)
+      throw (Oops("I did it again"));
+    return m_head -> m_data;
+  
+}
 template <class T>
-bool LinkedListStack<T>::isEmpty()
+bool LinkedListStack<T>::isEmpty () const
 {
   if (m_head==NULL)
     return true;
@@ -64,22 +82,6 @@ void LinkedListStack<T>::pop()
 	return;
 }
 
-template <class T>
-void LinkedListStack<T>::clear()
-{
-  Node<T>* tmp = m_head;  
-	Node<T>* tmp2;
-  while (tmp != NULL)
-  {
-    tmp2 = tmp -> m_next;  
-    delete tmp;
-    tmp = tmp2;
-  }
-  m_head = NULL;
-  m_back = NULL;
-  m_size = 0;
-  return;
-}
 
 template <class T>
 int LinkedListStack<T>::size() const
@@ -91,13 +93,35 @@ int LinkedListStack<T>::size() const
 std::ostream& operator<< (std::ostream& out, const LinkedListStack<T>& list)
 {
   int size = (list.size());
-  cout << size << ": ";
+  out << size << ": " << endl;
   const Node<T>* tmp = list.getFirstPtr(); 
 	for (int i = 0; i < size; i++)
 	{
-	  out << tmp -> m_data << " ";
+	  out << "member" << i+1 <<": " <<tmp -> m_data << endl;
 	  tmp = tmp -> m_next;
 	}
   
   return out;
 }
+
+
+
+template <class T>
+LinkedListStack<T>::~LinkedListStack()
+{
+  clear();
+} 
+
+
+
+
+template <class T> 
+const Node<T>* LinkedListStack<T>::getFirstPtr() const
+{
+  Node<T>* fPTR = m_head;
+  return fPTR;
+}
+
+
+
+
