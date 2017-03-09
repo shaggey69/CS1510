@@ -5,31 +5,79 @@ Date: 3/15/2017
 Description: brain lab implement 
 */
 
-
+#include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include "stack.h"
-using namespace std;
 
+using namespace std; 
+bool isBR(char test);
+bool isInt(char test);
+bool isOP(char test);
 
-int main ()
+int main()
 {
-  LinkedListStack<string> justinBiberORdie;
-  
- 
- 
-  justinBiberORdie.push("ups bc he's so fit");
-  justinBiberORdie.push("ing in line, bc I wabt to see him first");
-  justinBiberORdie.push("into my arms");
-  justinBiberORdie.push("his love all over the known universe");
-  
-  cout << endl <<  justinBiberORdie;
-  cout << endl <<  justinBiberORdie.top();
-  
-  justinBiberORdie.pop(); //all over him
-  justinBiberORdie.pop(); // his virgintiy
-
-    cout << endl <<  justinBiberORdie;
+  LinkedListStack<char> circleBR;
+  LinkedListStack<char> squareBR;
+  LinkedListStack<char> curlyBR;
 
   
-	return 0;
+  string ins,s1,s2,s3,s4;
+  while (getline(cin, ins))
+  {
+    istringstream inputstr(ins);      
+    inputstr >> s1 >> s2; 
+    inputstr >> s3 >>s4;                               
+    while (ins != ".")  
+    {
+      cout << endl << s1 << " + " << s2 << " = ";
+      cout <<endl << "first word: " << s3 << " second word: " << s4;
+    getline(cin, ins);  
+    istringstream inputstr(ins);      
+    inputstr >> s1 >> s2; 
+    inputstr >> s3 >> s4;
+
+    }
+  }
+  cout << endl;
+  return 0;
 }
+
+bool isBR(char test)
+{
+  if (test == '{'
+  ||
+  test == '}'
+   ||
+  test == '('
+   ||
+  test == ')'
+   ||
+  test == '['
+   ||
+  test == ']' )
+  return true;
+  return false;
+}
+bool isInt(char test)
+{
+  if (test >= 48 && test <= 57 )
+  return true;
+  return false;
+}
+bool isOP(char test)
+{
+  if (test == '+'
+  ||
+  test == '-'
+   ||
+  test == '*'
+   ||
+  test == '/'
+   ||
+  test == '%'
+  )
+  return true;
+  return false;
+}
+
