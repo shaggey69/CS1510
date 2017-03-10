@@ -48,11 +48,9 @@ public:
   // Postconditions: this list represents the empty list
   LinkedListStack();
 
-
   // Purpose: Destructor
   ~LinkedListStack();
   
-                             //specification
   const T& top() const throw (Oops);
   
   bool isEmpty() const;
@@ -65,11 +63,7 @@ public:
   
   int size() const;
   
-  const Node<T>* getFirstPtr() const;
-
-
-  
-            
+  const Node<T>* getFirstPtr() const;        
 };
 
 template <typename T>                 

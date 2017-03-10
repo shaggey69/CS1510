@@ -6,10 +6,8 @@ Description: brain lab implement
 */
 #include <iostream>
 using namespace std;
-  
-
-  
-  //clear function :)
+   
+//clear function :)
 template <class T> 
 void LinkedListStack<T>::clear()
 {
@@ -25,8 +23,8 @@ void LinkedListStack<T>::clear()
   m_back = NULL;
   m_size = 0;
   return;
-
 }
+
 template <class T>
 LinkedListStack<T>::LinkedListStack()
 {
@@ -44,6 +42,7 @@ const T& LinkedListStack<T>::top() const throw ( Oops )
     return m_head -> m_data;
   
 }
+
 template <class T>
 bool LinkedListStack<T>::isEmpty () const
 {
@@ -82,14 +81,13 @@ void LinkedListStack<T>::pop()
 	return;
 }
 
-
 template <class T>
 int LinkedListStack<T>::size() const
 {
   return m_size;
 }
 
- template <typename T>                 
+template <typename T>                 
 std::ostream& operator<< (std::ostream& out, const LinkedListStack<T>& list)
 {
   int size = (list.size());
@@ -104,16 +102,11 @@ std::ostream& operator<< (std::ostream& out, const LinkedListStack<T>& list)
   return out;
 }
 
-
-
 template <class T>
 LinkedListStack<T>::~LinkedListStack()
 {
   clear();
 } 
-
-
-
 
 template <class T> 
 const Node<T>* LinkedListStack<T>::getFirstPtr() const
