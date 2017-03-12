@@ -8,24 +8,27 @@ Description: brain lab implement
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
-#include "stack.h"
+#include <string>
 
+#include "stack.h"
 using namespace std;
 bool isBRopen(string test);
 bool isBRclose(string test);
 bool isInt(string test);
 bool isOP(string test);
-
+int calcPerBR(string temp);
 int main()
 {
+
   LinkedListStack<int> circleBR;
   LinkedListStack<int> squareBR;
   LinkedListStack<int> curlyBR;
-  int count = 0 ;
-  int tempInt = 0;
-  int sum = 0;
+  int countWordsPerSentance = 0 ; //counts words in sentance
+  int tempInt = 0; //int exttracred from input
+  int totalSum = 0; // per sentancce 
+  int sumPerBR = 0; // per brackts 
   int sentanceCounter = 0;
-  string op;
+  string op =  "";
   string ins,s1;
   bool itCool = true;
 
@@ -35,15 +38,15 @@ int main()
 
     while (inputstr >> s1 && itCool ) //per word
     {
-    	count ++;
+    	countWordsPerSentance ++;
       if (isBRopen(s1)) //open brackets check per word
       {
       	if (s1 == "{")
-	      	curlyBR.push(count);
+	      	curlyBR.push(countWordsPerSentance);
 	      else if (s1 == "[")
-	      	squareBR.push(count);
+	      	squareBR.push(countWordsPerSentance);
 	      else if (s1 == "(")
-	      	circleBR.push(count);
+	      	circleBR.push(countWordsPerSentance);
       }
 	    else if (isBRclose(s1)) //closed brackets check per word
 	    {
@@ -63,22 +66,42 @@ int main()
 	      {
 	     		if (circleBR.isEmpty())
 	     			itCool = false;
-	      	circleBR.pop();
+          else
+          {
+            int start = 0; //index of ins
+            int end = 0; //index of ins
+
+            string temp;
+            cout << endl << "Test: "
+            <<endl << "Top: " <<circleBR.top() 
+            <<endl << "word in sentance: " <<countWordsPerSentance
+            <<endl << "the sentce itself: " <<ins;
+            istringstream moreTemps(ins);
+
+            
+            for (int i =0; i <circleBR.top() ; i++)
+            {
+              
+              
+            }  
+            
+            
+            
+            temp.append(ins,,);
+            calcPerBR(temp);
+            
+          }
+          circleBR.pop();
+          }
 	   		}
 	   	}
-	    else if (isInt(s1))
-	    {
-	    	tempInt = atoi(s1.c_str());
-	    }
+ 
 	    
-	    else if (isOP(s1))
-	    {
-	    	op = s1;
-	    }
-	 } //end while per word
+
+	  //end while per word
     if (s1 != ".")
     {  
-  	  count = 0;
+  	  countWordsPerSentance = 0;
       if (!(curlyBR.isEmpty() && circleBR.isEmpty() && squareBR.isEmpty()))
         itCool = false;
       curlyBR.clear();
@@ -86,7 +109,7 @@ int main()
       squareBR.clear();
   	  cout << endl << "#" << sentanceCounter+1 << " : ";
   	  if (itCool)
-  		  cout << sum ;
+  		  cout << totalSum ;
   		else
   		  cout << "INVALID!" ;
       itCool = true;
@@ -148,4 +171,37 @@ bool isOP(string test)
   )
     return true;
   return false;
+}
+int calcPerBR(string inBr)
+{
+  int sum = 0;
+  cout << endl << inBr;
+  
+  
+  /*
+  else if (isInt(s1))
+	    {
+	    	tempInt = atoi(s1.c_str());
+        if (op != NULL)
+          if (op == "+")
+            sumPerBR =+ tempInt;
+           else if (op == "-")
+            sumPerBR =- tempInt;
+           else if (op == "/")
+            sumPerBR =/ tempInt;
+           else if (op == "*")
+            sumPerBR =* tempInt;
+           else if (op == "%")
+            sumPerBR = sumPerBR% tempInt;
+          else 
+            sumPerBR = tempInt;
+        op = NULL;
+	    }
+	    
+	    else if (isOP(s1))
+	    {
+	    	op = s1;
+	    }
+  */
+  return sum;
 }
