@@ -35,12 +35,16 @@ LinkedListStack<T>::LinkedListStack()
 
 template <class T>
 const T& LinkedListStack<T>::top() const throw ( Oops )
-{
+{ 
+
   
+  {
     if (m_head == NULL)
       throw (Oops("I did it again"));
-    return m_head -> m_data;
   
+    return m_head -> m_data;
+  }
+
 }
 
 template <class T>
