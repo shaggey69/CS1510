@@ -1,5 +1,0 @@
-1 2 hello1 world1 aasfaf sgdipo
-3 4 hello2 world2
-5 6 hello3 world3 fgqyd
-20 34 hello4 world4
-.

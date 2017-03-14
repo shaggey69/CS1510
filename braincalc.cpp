@@ -4,12 +4,10 @@ Section: 1510 A
 Date: 3/15/2017
 Description: brain lab implement
 */
-
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <string>
-
 #include "stack.h"
 using namespace std;
 bool isBRopen(string test);
@@ -28,7 +26,6 @@ int main()
   int countWordsPerSentance = 0 ; //counts words in sentance
   int totalSum = 0; // per sentancce 
   int sentanceCounter = 0;
-  string op =  "";
   string ins,insOriginal,s1;
   bool itCool = true;
 
@@ -36,6 +33,7 @@ int main()
   {
     insOriginal = ins;
     istringstream inputstr(insOriginal);
+    //cout << endl << "THE orignl sentace before replacment: "<<  ins;
 
     while (inputstr >> s1 && itCool ) //per word
     {
@@ -67,7 +65,7 @@ int main()
 	     			itCool = false;
           else
           {
-            totalSum = extractBR(squareBR,ins,countWordsPerSentance,insOriginal);
+           totalSum = extractBR(squareBR,ins,countWordsPerSentance,insOriginal);
             squareBR.pop();
           }
 	      }	
@@ -84,7 +82,7 @@ int main()
 	   	}
 	   } //end while per word of sentance
     if (s1 != ".")
-    {  
+    {   
 
       if (!(curlyBR.isEmpty() && circleBR.isEmpty() && squareBR.isEmpty()))
         itCool = false;
@@ -135,7 +133,10 @@ bool isInt(string test)
 {
   bool isDIG = true;  
   int length = test.length();
-  for (int i = 0 ; i < length ; i++)
+  if (!(isdigit(test[0]) || (test[0]=='-')))
+    return false;
+  
+  for (int i = 1 ; i < length ; i++)
    if (!(isdigit(test[i])))
     isDIG = false;
   return isDIG;
@@ -165,7 +166,9 @@ int calcPerBR(string inBr)
 
   while (inputstr2 >> s2)
   {
-    if (isInt(s2))
+    if (isOP(s2))
+  	 op = s2;
+    else if (isInt(s2))
 	  {
         tempInt = atoi(s2.c_str()); 
         if (op == "+")
@@ -181,8 +184,9 @@ int calcPerBR(string inBr)
         else
           sumPerBR = tempInt;
 	  }    
-  	if (isOP(s2))
-  	 op = s2;	 
+  		 
+   //cout << endl << "extracting: " << s2 ;
+  //cout << endl << "sum is: " << sumPerBR ;
   }
   return sumPerBR;
 }
@@ -205,13 +209,6 @@ int extractBR(LinkedListStack<int> & brStack, string & ins,
     start++;
   }  
   
-  /*
-  cout << endl << "end: " << end;
-  cout << endl << "temp2_numofWS: " << temp2_numofWS;
-  cout << endl << "countWordsPerSentance: " << countWordsPerSentance;
-  
-  cout << endl << "insOriginal: " << insOriginal << "  is untill here";
-  */
   while (temp2_numofWS < countWordsPerSentance-1)
   {
     if (insOriginal[end] == 32)
@@ -219,30 +216,30 @@ int extractBR(LinkedListStack<int> & brStack, string & ins,
     end++;
   }
   end++;
- //cout << endl << "start  of sub is: " << start-2;
-//cout << endl << "end of sub is: " << end-start+1+start-2;
+
 
   temp = ins.substr(start-2,end-start+2);
+  
+   //cout << endl << "the extracted part: "<<  temp;
 
   sum = calcPerBR(temp);
-  sumInStr << sum; 
-  ins.replace(start-2,end-start+2,sumInStr.str()); 
+  
 
- //  cout << endl << "# of changied charcters " << end-start+2;
-  // cout << endl << "# if new input " << sumInStr.str().length();
+   
+    sumInStr << sum; 
+    ins.replace(start-2,end-start+2,sumInStr.str()); 
+  
 
    int tempBEG = end-start+2;
    int tempEND = sumInStr.str().length();
 
+ // cout << endl << "the orignl sentace before replacment: "<<  ins;
+
    for (int i = tempEND; i < tempBEG; i++)
     ins.insert(start-2+ tempEND ," "); 
+ // cout << endl << "the orignl sentace with replacment:   "<<  ins;
 
-/*
-  cout << endl << "the extcatred part: "<< temp;
-  cout << endl << "the extcatred part sumation: "<<  sumInStr.str();
-  cout << endl << "the orignl sentace with replacment: "<<  ins;
-
-  */
+  
   return sum;
 
 }
