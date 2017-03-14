@@ -14,11 +14,11 @@ Description: brain lab implement
 using namespace std;
 bool isBRopen(string test);
 bool isBRclose(string test);
-bool isInt(char test);
-bool isOP(char test);
+bool isInt(string test);
+bool isOP(string test);
 int calcPerBR(string temp);
 int extractBR(LinkedListStack<int> & brStack, string &  ins,
-const int countWordsPerSentance);
+const int countWordsPerSentance, const string insOriginal);
 int main()
 {
 
@@ -27,15 +27,15 @@ int main()
   LinkedListStack<int> curlyBR;
   int countWordsPerSentance = 0 ; //counts words in sentance
   int totalSum = 0; // per sentancce 
-  //int sumPerBR = 0; // per brackts 
   int sentanceCounter = 0;
   string op =  "";
-  string ins,s1;
+  string ins,insOriginal,s1;
   bool itCool = true;
 
   while (getline(cin, ins)) // per line
   {
-    istringstream inputstr(ins);
+    insOriginal = ins;
+    istringstream inputstr(insOriginal);
 
     while (inputstr >> s1 && itCool ) //per word
     {
@@ -57,7 +57,7 @@ int main()
 	     			itCool = false;
           else
           {
-            extractBR(curlyBR,ins,countWordsPerSentance);
+            totalSum = extractBR(curlyBR,ins,countWordsPerSentance,insOriginal);
             curlyBR.pop();
           }
 	     	}
@@ -67,7 +67,7 @@ int main()
 	     			itCool = false;
           else
           {
-            extractBR(squareBR,ins,countWordsPerSentance);
+            totalSum = extractBR(squareBR,ins,countWordsPerSentance,insOriginal);
             squareBR.pop();
           }
 	      }	
@@ -77,7 +77,7 @@ int main()
 	     			itCool = false;
           else
           {
-            extractBR(circleBR,ins,countWordsPerSentance);
+            totalSum = extractBR(circleBR,ins,countWordsPerSentance,insOriginal);
             circleBR.pop();        
           }
         }
@@ -86,15 +86,14 @@ int main()
     if (s1 != ".")
     {  
 
-      totalSum = calcPerBR(ins);
       if (!(curlyBR.isEmpty() && circleBR.isEmpty() && squareBR.isEmpty()))
         itCool = false;
       
-  	  cout << endl << "#" << sentanceCounter+1 << " : ";
+  	  cout  << "#" << sentanceCounter+1 << " : " ;
   	  if (itCool)
-  		  cout << totalSum ;
+  		  cout << totalSum << endl ;
   		else
-  		  cout << "INVALID!" ;
+  		  cout << "INVALID!" << endl ;
 
       //restarting paramters for next sentacne
       itCool = true;
@@ -132,59 +131,63 @@ bool isBRclose(string test)
   return true;
   return false;
 }
-bool isInt(char test)
+bool isInt(string test)
 {
-  if (test >= 48 && test <= 57)
-    return true;
-  return false;
+  bool isDIG = true;  
+  int length = test.length();
+  for (int i = 0 ; i < length ; i++)
+   if (!(isdigit(test[i])))
+    isDIG = false;
+  return isDIG;
 }
-bool isOP(char test)
+bool isOP(string test)
 {
-  if (test == '+'
+  if (test == "+"
   ||
-  test == '-'
+  test == "-"
    ||
-  test == '*'
+  test == "*"
    ||
-  test == '/'
+  test == "/"
    ||
-  test == '%'
+  test == "%"
   )
     return true;
   return false;
 }
-int calcPerBR(string inBr)
+int calcPerBR(string inBr) 
 {
-  //cout << endl << inBr;
   int tempInt = 0;
-  char op = ' ';
+  string op = " ";
   int sumPerBR = 0;
-  int inBrLength = inBr.length();
-  for (int i = 0 ; i < inBrLength ; i++)
+  istringstream inputstr2(inBr);
+  string s2;
+
+  while (inputstr2 >> s2)
   {
-    if (isInt(inBr[i]) && isInt(inBr[i+1]))
+    if (isInt(s2))
 	  {
-	    tempInt = inBr[i]-48; //translating ascii code to int :)
-        if (op == '+')
+        tempInt = atoi(s2.c_str()); 
+        if (op == "+")
           sumPerBR += tempInt; 
-        else if (op == '-')
+        else if (op == "-")
           sumPerBR -= tempInt;
-        else if (op == '/')
+        else if (op == "/")
           sumPerBR = sumPerBR / tempInt;
-        else if (op == '*')
+        else if (op == "*")
           sumPerBR = sumPerBR * tempInt;
-        else if (op == '%')
+        else if (op == "%")
           sumPerBR = sumPerBR % tempInt; 
         else
           sumPerBR = tempInt;
 	  }    
-  	if (isOP(inBr[i]))
-  	 op = inBr[i];	 
+  	if (isOP(s2))
+  	 op = s2;	 
   }
   return sumPerBR;
 }
 int extractBR(LinkedListStack<int> & brStack, string & ins,
- const int countWordsPerSentance)
+ const int countWordsPerSentance, const string insOriginal)
 {
   int sum;
   int start = 0; //index of ins
@@ -197,27 +200,49 @@ int extractBR(LinkedListStack<int> & brStack, string & ins,
 
   while (temp_numofWS < brStack.top())
   {
-    if (ins[start] == 32)
+    if (insOriginal[start] == 32)
       temp_numofWS++;   
     start++;
-  }     
-  while (temp2_numofWS < countWordsPerSentance)
-  {
-    if (ins[end] == 32)
-      temp2_numofWS++;   
-    end++;
   }  
-  end--;
   
+  /*
+  cout << endl << "end: " << end;
+  cout << endl << "temp2_numofWS: " << temp2_numofWS;
+  cout << endl << "countWordsPerSentance: " << countWordsPerSentance;
+  
+  cout << endl << "insOriginal: " << insOriginal << "  is untill here";
+  */
+  while (temp2_numofWS < countWordsPerSentance-1)
+  {
+    if (insOriginal[end] == 32)
+      temp2_numofWS++;
+    end++;
+  }
+  end++;
+ //cout << endl << "start  of sub is: " << start-2;
+//cout << endl << "end of sub is: " << end-start+1+start-2;
+
   temp = ins.substr(start-2,end-start+2);
-  cout << endl << "the Xtracted string: " << temp;
+
   sum = calcPerBR(temp);
   sumInStr << sum; 
-  cout << endl << sumInStr.str();
   ins.replace(start-2,end-start+2,sumInStr.str()); 
- // cout << endl << ins;
 
+ //  cout << endl << "# of changied charcters " << end-start+2;
+  // cout << endl << "# if new input " << sumInStr.str().length();
 
+   int tempBEG = end-start+2;
+   int tempEND = sumInStr.str().length();
+
+   for (int i = tempEND; i < tempBEG; i++)
+    ins.insert(start-2+ tempEND ," "); 
+
+/*
+  cout << endl << "the extcatred part: "<< temp;
+  cout << endl << "the extcatred part sumation: "<<  sumInStr.str();
+  cout << endl << "the orignl sentace with replacment: "<<  ins;
+
+  */
   return sum;
 
 }
